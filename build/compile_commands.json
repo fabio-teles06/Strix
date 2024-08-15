@@ -1,0 +1,20 @@
+[
+{
+  "directory": "C:/Users/Fabio/repos/Strix/build",
+  "command": "C:\\MinGW\\bin\\c++.exe -DSTRIX_EXPORTS -Dstrix_EXPORTS @CMakeFiles/strix.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\strix.dir\\src\\platform\\win64_platform.cpp.obj -c C:\\Users\\Fabio\\repos\\Strix\\src\\platform\\win64_platform.cpp",
+  "file": "C:/Users/Fabio/repos/Strix/src/platform/win64_platform.cpp",
+  "output": "CMakeFiles/strix.dir/src/platform/win64_platform.cpp.obj"
+},
+{
+  "directory": "C:/Users/Fabio/repos/Strix/build",
+  "command": "C:\\MinGW\\bin\\c++.exe -DSTRIX_EXPORTS -Dstrix_EXPORTS @CMakeFiles/strix.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\strix.dir\\src\\strix_gl.cpp.obj -c C:\\Users\\Fabio\\repos\\Strix\\src\\strix_gl.cpp",
+  "file": "C:/Users/Fabio/repos/Strix/src/strix_gl.cpp",
+  "output": "CMakeFiles/strix.dir/src/strix_gl.cpp.obj"
+},
+{
+  "directory": "C:/Users/Fabio/repos/Strix/build",
+  "command": "C:\\MinGW\\bin\\c++.exe  @CMakeFiles/strix_test.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\strix_test.dir\\src\\strix_test.cpp.obj -c C:\\Users\\Fabio\\repos\\Strix\\src\\strix_test.cpp",
+  "file": "C:/Users/Fabio/repos/Strix/src/strix_test.cpp",
+  "output": "CMakeFiles/strix_test.dir/src/strix_test.cpp.obj"
+}
+]
