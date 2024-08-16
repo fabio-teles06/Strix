@@ -1,0 +1,18 @@
+# ninja log v6
+29	2015	7455107022469991	CMakeFiles/strix.dir/src/strix_gl.cpp.obj	db03cda9aa612bf9
+22	2640	7455111460565525	CMakeFiles/strix_test.dir/src/strix_test.cpp.obj	2dfc6e37720ee841
+22	6161	7455105998659104	CMakeFiles/strix_platform.dir/src/platform/win64_platform.cpp.obj	a57c1eade9b68347
+3391	4056	7455111499572052	libstrix.dll	2c1a7cd9e8973981
+11	3388	7455111460441032	CMakeFiles/strix.dir/src/platform/win64_platform.cpp.obj	9a31c26289db7280
+3391	4056	7455111499572052	libstrix.dll.a	2c1a7cd9e8973981
+12	631	7455111968911575	strix_test.exe	4bfb0124d9606534
+20	2375	7455114590425641	CMakeFiles/strix.dir/src/strix_gl.cpp.obj	7c49abac0a0cf596
+30	2830	7455114590521571	CMakeFiles/strix_test.dir/src/strix_test.cpp.obj	d91b09c14cbb768d
+11	3751	7455114590335626	CMakeFiles/strix.dir/src/platform/win64_platform.cpp.obj	2a988fb23a21a1e1
+3752	4558	7455114633679373	libstrix.dll	d97ccec6654dd469
+3752	4558	7455114633679373	libstrix.dll.a	d97ccec6654dd469
+4558	4942	7455114635807468	strix_test.exe	4bfb0124d9606534
+11	2239	7455121625112383	CMakeFiles/strix_test.dir/src/strix_test.cpp.obj	d91b09c14cbb768d
+2240	2884	7455121647407071	strix_test.exe	4bfb0124d9606534
+20	2139	7455122054878663	CMakeFiles/strix_test.dir/src/strix_test.cpp.obj	d91b09c14cbb768d
+2141	2587	7455122076086933	strix_test.exe	4bfb0124d9606534

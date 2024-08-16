@@ -1,7 +1,7 @@
 #define STRIX_GL_DEFINE_EXTERN
 #include <strix/strix_gl.h>
 
-#if defined(STRIX_EXPORTS) && defined(PLATFORM_WINDOWS)
+#if defined(STRIX_ENGINE_EXPORTS) && defined(PLATFORM_WINDOWS)
 namespace strix
 {
     static HMODULE opengl32Dll = GetModuleHandleA("OpenGL32.dll");
