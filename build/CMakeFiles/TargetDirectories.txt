@@ -1,4 +1,0 @@
-C:/Users/OBRAS/repos/Strix/build/CMakeFiles/strix.dir
-C:/Users/OBRAS/repos/Strix/build/CMakeFiles/strix_test.dir
-C:/Users/OBRAS/repos/Strix/build/CMakeFiles/edit_cache.dir
-C:/Users/OBRAS/repos/Strix/build/CMakeFiles/rebuild_cache.dir
