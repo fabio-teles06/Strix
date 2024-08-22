@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 set(SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/smolSDK")
 file(MAKE_DIRECTORY "${OUTPUT_DIR}")
@@ -19,15 +20,18 @@ if (WIN32)
     set(PLATFORM "win64")
 endif()
 
-# engine library
+#external libs
+add_subdirectory(${LIBS_DIR}/sol)
+add_subdirectory(${LIBS_DIR}/lua)
 
+# engine library
 add_library(strix SHARED
     src/platform/${PLATFORM}_platform.cpp
     src/strix_gl.cpp
 )
 target_include_directories(strix PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(strix PRIVATE -DSTRIX_ENGINE_EXPORTS)
-target_link_libraries(strix PRIVATE ${OPENGL_LIBRARY})
+target_link_libraries(strix PRIVATE ${OPENGL_LIBRARY} lua sol)
 
 if (STRIX_EXPORT_SDK)
     add_custom_command(TARGET strix POST_BUILD
@@ -37,13 +41,13 @@ if (STRIX_EXPORT_SDK)
 endif()
 
 #build game dll
-add_library(game SHARED
-    demo/quad_demo.cpp
-)
-target_link_libraries(game PRIVATE strix)
+# add_library(game SHARED
+#     demo/quad_demo.cpp
+# )
+# target_link_libraries(game PRIVATE strix)
 
 # test executable
 add_executable(strix_test
     src/strix_test.cpp
 )
-target_link_libraries(strix_test PRIVATE strix)
+target_link_libraries(strix_test PRIVATE strix lua sol)
