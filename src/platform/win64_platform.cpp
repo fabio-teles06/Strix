@@ -22,6 +22,11 @@ namespace strix
         HGLRC rc;
     };
 
+    struct Module
+    {
+        HMODULE handle;
+    };
+
     static struct RenderAPIInfo
     {
         enum RenderAPIName
@@ -223,6 +228,7 @@ namespace strix
 
     int Platform::getTime()
     {
+        //get time in milliseconds
         return GetTickCount();
     }
 
@@ -309,6 +315,40 @@ namespace strix
         return true;
     }
 
-    // TODO: Implementar funções de modificar a janela (titúto, tamanho, etc)
+    Module *Platform::loadModule(const char *path)
+    {
+        HMODULE hmodule = LoadLibrary(path);
+        if (hmodule)
+        {
+            Module *module = new Module;
+            module->handle = hmodule;
+            return module;
+        }
+
+        Logger::Error("Failed to load module %s", path);
+        return nullptr;
+    }
+
+    bool Platform::unloadModule(Module *module)
+    {
+        if (!FreeLibrary(module->handle))
+        {
+            Logger::Error("Failed to unload module");
+            return false;
+        }
+        delete module;
+        return true;
+    }
+
+    void *Platform::getModuleFunction(Module *module, const char *function)
+    {
+        void *addr = (void *)GetProcAddress(module->handle, function);
+        if (!addr)
+        {
+            Logger::Error("Faild to fetch '%s' function pointer from module", function);
+            return nullptr;
+        }
+        return addr;
+    }
 
 }

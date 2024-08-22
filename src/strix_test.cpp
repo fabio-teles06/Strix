@@ -2,107 +2,57 @@
 #include <strix/strix_logger.h>
 #include <strix/strix_platform.h>
 #include <strix/strix_gl.h>
+#include <strix/strix_game.h>
+
+#include <iostream>
+#include <string>
 
 int strixMain()
 {
-    strix::Platform platform;
-    strix::Platform::initOpenGL(3, 3);
-    strix::Window *window = platform.createWindow(800, 600, "Strix Engine");
-
-    // set triangle
-    unsigned int vao, vbo;
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f};
-
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-
-    // set shader
-    const char *vertexShaderSource = "#version 330 core\n"
-                                     "layout (location = 0) in vec3 aPos;\n"
-                                     "void main()\n"
-                                     "{\n"
-                                     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                     "}\0";
-    const char *fragmentShaderSource = "#version 330 core\n"
-                                       "out vec4 FragColor;\n"
-                                       "void main()\n"
-                                       "{\n"
-                                       "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                       "}\0";
-
-    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-    if (!success)
+    if (!strix::Platform::initOpenGL(3, 3))
     {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        strix::Logger::Error("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s", infoLog);
+        strix::Logger::Error("Failed to initialize OpenGL");
+        return -1;
     }
 
-    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
+    strix::Window *window = strix::Platform::createWindow(800, 600, "Strix Engine");
 
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-
-    if (!success)
+    if (!window)
     {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        strix::Logger::Error("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s", infoLog);
+        strix::Logger::Error("Failed to create window");
+        return -1;
     }
 
-    int shaderProgram = glCreateProgram();
+    strix::Platform::setShouldClose(window, false);
 
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
+    strix::Module *game = strix::Platform::loadModule("libgame.dll");
+    strix::STRIX_GAME_CALLBACK_ONSTART onGameStart = (strix::STRIX_GAME_CALLBACK_ONSTART)
+        strix::Platform::getModuleFunction(game, strix::STRIX_CALLBACK_NAME_ONSTART);
 
-    glLinkProgram(shaderProgram);
+    strix::STRIX_GAME_CALLBACK_ONUPDATE onGameUpdate = (strix::STRIX_GAME_CALLBACK_ONUPDATE)
+        strix::Platform::getModuleFunction(game, strix::STRIX_CALLBACK_NAME_ONUPDATE);
 
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    strix::STRIX_GAME_CALLBACK_ONRENDER onGameRender = (strix::STRIX_GAME_CALLBACK_ONRENDER)
+        strix::Platform::getModuleFunction(game, strix::STRIX_CALLBACK_NAME_ONRENDER);
 
-    if (!success)
+    strix::STRIX_GAME_CALLBACK_ONSTOP onGameStop = (strix::STRIX_GAME_CALLBACK_ONSTOP)
+        strix::Platform::getModuleFunction(game, strix::STRIX_CALLBACK_NAME_ONSTOP);
+
+    onGameStart();
+
+    while (!strix::Platform::getShouldClose(window))
     {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        strix::Logger::Error("ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s", infoLog);
+        strix::Platform::pollEvents(window);
+
+        onGameUpdate(0.0f);
+        onGameRender();
+
+        strix::Platform::swapBuffers(window);
     }
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    onGameStop();
 
-    glUseProgram(shaderProgram);
-
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    while (!platform.getShouldClose(window))
-    {
-        platform.pollEvents(window);
-
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        platform.swapBuffers(window);
-    }
-
-    platform.destroyWindow(window);
-
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &vbo);
-    glDeleteProgram(shaderProgram);
+    strix::Platform::destroyWindow(window);
 
     return 0;
 }

@@ -36,6 +36,12 @@ if (STRIX_EXPORT_SDK)
     )
 endif()
 
+#build game dll
+add_library(game SHARED
+    demo/quad_demo.cpp
+)
+target_link_libraries(game PRIVATE strix)
+
 # test executable
 add_executable(strix_test
     src/strix_test.cpp

@@ -15,6 +15,7 @@
 namespace strix
 {
     struct Window;
+    struct Module;
 
     struct STRIX_PLATFORM_API Platform final
     {
@@ -25,6 +26,9 @@ namespace strix
         static void swapBuffers(Window *window);
         static bool getShouldClose(Window *window);
         static void setShouldClose(Window *window, bool shouldClose);
+        static Module* loadModule(const char* path);
+        static bool unloadModule(Module* module);
+        static void* getModuleFunction(Module* module, const char* name);
         static int getTime();
     };
 }
