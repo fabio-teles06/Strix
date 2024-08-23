@@ -10,9 +10,13 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 set(SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/smolSDK")
 file(MAKE_DIRECTORY "${OUTPUT_DIR}")
+
+#libs
+add_subdirectory(${LIBS_DIR}/glm)
 
 # Platform specific settings
 if (WIN32)
@@ -27,7 +31,7 @@ add_library(strix SHARED
 )
 target_include_directories(strix PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(strix PRIVATE -DSTRIX_ENGINE_EXPORTS)
-target_link_libraries(strix PRIVATE ${OPENGL_LIBRARY})
+target_link_libraries(strix PRIVATE ${OPENGL_LIBRARY} glm)
 
 if (STRIX_EXPORT_SDK)
     add_custom_command(TARGET strix POST_BUILD
