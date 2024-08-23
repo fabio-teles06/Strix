@@ -1,6 +1,7 @@
 #ifndef STRIX_LOGGER_H
 #define STRIX_LOGGER_H
 
+#include <strix/strix.h>
 #include <cstdio>
 #include <mutex>
 
@@ -13,7 +14,7 @@ namespace strix
         ERROR_LOG
     };
 
-    class Logger
+    class STRIX_API Logger
     {
     private:
         static LogLevel m_logLevel;
@@ -58,9 +59,6 @@ namespace strix
             }
         }
     };
-
-    LogLevel Logger::m_logLevel = LogLevel::INFO_LOG;
-    std::mutex Logger::m_log_mutex;
 }
 
 #endif // STRIX_LOGGER_H

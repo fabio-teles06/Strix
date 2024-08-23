@@ -10,6 +10,9 @@ void onStart()
 
 void onUpdate(float deltaTime)
 {
+    if (strix::Platform::getTime() % 1000 == 0){
+        strix::Logger::Info("Time: %d", strix::Platform::getTime());
+    }
 }
 
 void onRender()

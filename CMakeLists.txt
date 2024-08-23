@@ -28,6 +28,7 @@ endif()
 add_library(strix SHARED
     src/platform/${PLATFORM}_platform.cpp
     src/strix_arena.cpp
+    src/strix_logger.cpp
     src/strix_gl.cpp
 )
 target_include_directories(strix PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
