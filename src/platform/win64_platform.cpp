@@ -351,4 +351,19 @@ namespace strix
         return addr;
     }
 
+    void *Platform::getMemory(size_t size)
+    {
+        return malloc(size);
+    }
+
+    void *Platform::resizeMemory(void *memory, size_t size)
+    {
+        return realloc(memory, size);
+    }
+
+    void Platform::freeMemory(void *memory)
+    {
+        free(memory);
+    }
+
 }

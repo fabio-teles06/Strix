@@ -12,7 +12,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 set(SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
-set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/smolSDK")
+set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/strixSDK")
 file(MAKE_DIRECTORY "${OUTPUT_DIR}")
 
 #libs
@@ -27,6 +27,7 @@ endif()
 
 add_library(strix SHARED
     src/platform/${PLATFORM}_platform.cpp
+    src/strix_arena.cpp
     src/strix_gl.cpp
 )
 target_include_directories(strix PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -46,8 +47,11 @@ add_library(game SHARED
 )
 target_link_libraries(game PRIVATE strix)
 
-# test executable
-add_executable(strix_test
-    src/strix_test.cpp
+# strix launcher
+add_executable(strix_launcher
+    src/strix_launcher.cpp
 )
-target_link_libraries(strix_test PRIVATE strix)
+target_link_libraries(strix_launcher PRIVATE strix)
+
+#copy resources to build directory
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_BINARY_DIR})

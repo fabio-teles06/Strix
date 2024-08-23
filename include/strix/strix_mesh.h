@@ -3,6 +3,7 @@
 
 #include <strix/strix.h>
 #include <strix/strix_gl.h>
+#include <strix/strix_shader.h>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <string>
@@ -38,7 +39,7 @@ namespace strix
 
             setupMesh();
         }
-        void Draw()
+        void Draw(Shader& shader)
         {
             uint16 diffuseNr = 1;
             uint16 specularNr = 1;
@@ -53,7 +54,7 @@ namespace strix
                 else if (name == "texture_specular")
                     number = std::to_string(specularNr++);
 
-                //Shader.setInt(("material." + name + number).c_str(), i);
+                shader.setInt(("material." + name + number).c_str(), i);
                 glBindTexture(GL_TEXTURE_2D, textures[i].id);
             }
             glActiveTexture(GL_TEXTURE0);
