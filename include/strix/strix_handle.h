@@ -6,7 +6,8 @@
 #include <string>
 #include <typeinfo>
 
-#define getSlotIndex(slotInfo) ((int)(char *)(slotInfo) - slots.getData()) / sizeof(SlotInfo)
+// #define getSlotIndex(slotInfo) ((int)(char *)(slotInfo) - slots.getData()) / sizeof(SlotInfo)
+#define getSlotIndex(slotInfo) ((int)((char *)(slotInfo) - slots.getData()) / sizeof(SlotInfo))
 #define INVALID_HANDLE(T) (Handle<T>{(int)0xFFFFFFFF, (int)0xFFFFFFFF})
 
 namespace strix
@@ -80,15 +81,13 @@ namespace strix
     template <typename T>
     inline T *Handle<T>::operator->()
     {
-        SMOL_ASSERT(Handle<T>::handleList != nullptr, "Handle<%s>::handleList is null", typeid(T).name());
         Handle<T> handle = *this;
         return Handle<T>::handleList->lookup(handle);
     }
 
     template <typename T>
     inline const T *Handle<T>::operator->() const
-    {
-        SMOL_ASSERT(Handle<T>::handleList != nullptr, "Handle<%s>::handleList is null", typeid(T).name());
+    {        
         const Handle<T> handle = *this;
         return Handle<T>::handleList->lookup(handle);
     }
@@ -218,7 +217,7 @@ namespace strix
 
         if (handle.slotIndex >= slots.getCapacity() / sizeof(T) || handle.slotIndex < 0)
         {
-            Log::warning("Attempting to remove a Handle slot out of bounds");
+            Logger::Warning("Attempting to remove a Handle slot out of bounds");
             return;
         }
 

@@ -28,6 +28,7 @@ endif()
 add_library(strix SHARED
     src/platform/${PLATFORM}_platform.cpp
     src/strix_arena.cpp
+    src/strix_resource_manager.cpp
     src/strix_logger.cpp
     src/strix_gl.cpp
 )
