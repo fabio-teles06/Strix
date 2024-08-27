@@ -15,35 +15,40 @@ set(SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/strixSDK")
 file(MAKE_DIRECTORY "${OUTPUT_DIR}")
 
-#libs
-add_subdirectory(${LIBS_DIR}/glm)
+# libs
 
 # Platform specific settings
-if (WIN32)
+if(WIN32)
     set(PLATFORM "win64")
 endif()
 
 # engine library
-
 add_library(strix SHARED
+
+    # core
     src/platform/${PLATFORM}_platform.cpp
-    src/strix_arena.cpp
-    src/strix_resource_manager.cpp
     src/strix_logger.cpp
+
+    # rendering
     src/strix_gl.cpp
+    src/strix_gl_renderer.cpp
+
+    # math
+    src/strix_vector2.cpp
+    src/strix_vector3.cpp
 )
 target_include_directories(strix PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(strix PRIVATE -DSTRIX_ENGINE_EXPORTS)
-target_link_libraries(strix PRIVATE ${OPENGL_LIBRARY} glm)
+target_link_libraries(strix PRIVATE ${OPENGL_LIBRARY})
 
-if (STRIX_EXPORT_SDK)
+if(STRIX_EXPORT_SDK)
     add_custom_command(TARGET strix POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_DIR}/include
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/include/strix ${OUTPUT_DIR}/include/strix
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_DIR}/include
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/include/strix ${OUTPUT_DIR}/include/strix
     )
 endif()
 
-#build game dll
+# build game dll
 add_library(game SHARED
     demo/quad_demo.cpp
 )
@@ -55,5 +60,5 @@ add_executable(strix_launcher
 )
 target_link_libraries(strix_launcher PRIVATE strix)
 
-#copy resources to build directory
+# copy resources to build directory
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_BINARY_DIR})

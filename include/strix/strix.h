@@ -18,6 +18,8 @@
 #define STRIX_API
 #endif // PLATFORM_WINDOWS
 
+#define ASSERT(_e, ...) if (!(_e)) { fprintf(stderr, __VA_ARGS__); exit(1); }
+
 #include <stdint.h>
 typedef int8_t int8;
 typedef int16_t int16;
