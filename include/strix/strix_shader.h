@@ -23,12 +23,7 @@ namespace strix
 
         Type type;
         char name[STRIX_MAX_SHADER_PARAMETER_NAME_LEN];
-
-        union
-        {
-            // OpenGL specific
-            unsigned int glUniformLocation;
-        };
+        unsigned int glUniformLocation;
     };
 
 #define STRIX_MAX_SHADER_PARAMETERS 16

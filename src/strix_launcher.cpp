@@ -27,6 +27,7 @@ int strixMain()
     strix::Platform::setShouldClose(window, false);
 
     strix::Renderer::initialize();
+    glUseProgram(strix::Renderer::getDefaultShaderProgram().program);
 
     strix::Module *game = strix::Platform::loadModule("libgame.dll");
     strix::STRIX_GAME_CALLBACK_ONSTART onGameStart = (strix::STRIX_GAME_CALLBACK_ONSTART)

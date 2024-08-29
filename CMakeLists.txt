@@ -15,12 +15,14 @@ set(SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/strixSDK")
 file(MAKE_DIRECTORY "${OUTPUT_DIR}")
 
-# libs
 
 # Platform specific settings
 if(WIN32)
     set(PLATFORM "win64")
 endif()
+
+# Rendering API
+set(RENDER "gl")
 
 # engine library
 add_library(strix SHARED
@@ -30,8 +32,8 @@ add_library(strix SHARED
     src/strix_logger.cpp
 
     # rendering
-    src/strix_gl.cpp
-    src/strix_gl_renderer.cpp
+    src/strix_${RENDER}.cpp
+    src/strix_${RENDER}_renderer.cpp
 
     # math
     src/strix_vector2.cpp

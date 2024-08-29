@@ -8,7 +8,6 @@
 
 namespace strix
 {
-
     ShaderProgram Renderer::defaultShader;
 
     void Renderer::initialize()
@@ -20,84 +19,48 @@ namespace strix
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
 
-    void Renderer::clear()
+    //
+    //Mesh
+    //
+    bool Renderer::createMesh(Mesh *outMesh, const float *vertices, int vertexCount, const unsigned int *indices, int indexCount)
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
+        outMesh->numVertices = vertexCount;
+        outMesh->numIndices = indexCount;
 
-    Mesh *Renderer::createMesh(bool dynamic, float *vertices, int numVertices, unsigned int *indices, int numIndices,
-                               float *normals, float *texcoords)
-    {
-        Mesh *mesh = new Mesh();
-        mesh->dynamic = dynamic;
+        glGenVertexArrays(1, &outMesh->vao);
+        glGenBuffers(1, &outMesh->vboPosition);
+        glGenBuffers(1, &outMesh->ibo);
 
-        // VAO
-        glGenVertexArrays(1, &mesh->vao);
-        glBindVertexArray(mesh->vao);
+        glBindVertexArray(outMesh->vao);
 
-        if (numVertices)
-        {
-            mesh->numVertices = numVertices;
-            mesh->vertexArraySize = numVertices * 3 * sizeof(float);
+        glBindBuffer(GL_ARRAY_BUFFER, outMesh->vboPosition);
+        glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, vertices, GL_STATIC_DRAW);
 
-            glGenBuffers(1, &mesh->vboPosition);
-            glBindBuffer(GL_ARRAY_BUFFER, mesh->vboPosition);
-            glBufferData(GL_ARRAY_BUFFER, mesh->vertexArraySize, vertices, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-            glVertexAttribPointer(Mesh::Attribute::POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glEnableVertexAttribArray(Mesh::Attribute::POSITION);
-        }
+        glVertexAttribPointer(Mesh::Attribute::POSITION, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+        glEnableVertexAttribArray(Mesh::Attribute::POSITION);
 
-        mesh->ibo = 0;
-        if (numIndices)
-        {
-            mesh->numIndices = numIndices;
-            mesh->indexArraySize = numIndices * sizeof(unsigned int);
-
-            glGenBuffers(1, &mesh->ibo);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->ibo);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh->indexArraySize, indices, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        }
-
-        if (normals)
-        {
-            glGenBuffers(1, &mesh->vboNormal);
-            glBindBuffer(GL_ARRAY_BUFFER, mesh->vboNormal);
-            glBufferData(GL_ARRAY_BUFFER, mesh->vertexArraySize, normals, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-            glVertexAttribPointer(Mesh::Attribute::NORMAL, 3, GL_FLOAT, GL_FALSE, 0, 0);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glEnableVertexAttribArray(Mesh::Attribute::NORMAL);
-        }
-
-        if (texcoords)
-        {
-            glGenBuffers(1, &mesh->vboTexcoord);
-            glBindBuffer(GL_ARRAY_BUFFER, mesh->vboTexcoord);
-            glBufferData(GL_ARRAY_BUFFER, mesh->vertexArraySize, texcoords, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-            glVertexAttribPointer(Mesh::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, 0);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glEnableVertexAttribArray(Mesh::Attribute::TEXCOORD);
-        }
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, outMesh->ibo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
         glBindVertexArray(0);
-        return mesh;
-    }
 
-    void Renderer::drawMesh(Mesh *mesh)
+        return true;
+    }
+    void Renderer::destroyMesh(Mesh *mesh)
     {
-        glUseProgram(defaultShader.program);
-        glBindVertexArray(mesh->vao);
-
-        glEnableVertexArrayAttrib(mesh->vao, Mesh::Attribute::POSITION);
-        glEnableVertexArrayAttrib(mesh->vao, Mesh::Attribute::NORMAL);
-        glEnableVertexArrayAttrib(mesh->vao, Mesh::Attribute::TEXCOORD);
-        glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, 0);
-        glDisableVertexArrayAttrib(mesh->vao, Mesh::Attribute::POSITION);
-        glDisableVertexArrayAttrib(mesh->vao, Mesh::Attribute::NORMAL);
-        glDisableVertexArrayAttrib(mesh->vao, Mesh::Attribute::TEXCOORD);
+        glDeleteBuffers(1, &mesh->vboPosition);
+        glDeleteBuffers(1, &mesh->ibo);
+        glDeleteVertexArrays(1, &mesh->vao);
     }
-
+    void Renderer::drawMesh(const Mesh &mesh, const ShaderProgram &shader)
+    {
+        glUseProgram(shader.program);
+        glBindVertexArray(mesh.vao);
+        glDrawElements(GL_TRIANGLES, mesh.numIndices, GL_UNSIGNED_INT, 0);
+    }
+    //
+    // Shaders
+    //
     bool Renderer::createShaderProgram(ShaderProgram *outShader, const char *vsSource, const char *fsSource)
     {
         outShader->valid = false;
@@ -217,7 +180,6 @@ namespace strix
         outShader->valid = true;
         return true;
     }
-
     ShaderProgram Renderer::getDefaultShaderProgram()
     {
         if (defaultShader.valid)
@@ -228,31 +190,16 @@ namespace strix
         const char *vsSource = R"(
             #version 330 core
             layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec3 aNormal;
-            layout (location = 2) in vec2 aTexcoord;
-
-            out vec3 Normal;
-            out vec2 Texcoord;
-
-            uniform mat4 model;
-            uniform mat4 view;
-            uniform mat4 projection;
-
+            
             void main()
             {
-                // gl_Position = projection * view * model * vec4(aPos, 1.0);
                 gl_Position = vec4(aPos, 1.0);
-                Normal = aNormal;
-                Texcoord = aTexcoord;
             }
         )";
 
         const char *fsSource = R"(
             #version 330 core
             out vec4 FragColor;
-
-            in vec3 Normal;
-            in vec2 Texcoord;
 
             void main()
             {
@@ -264,7 +211,6 @@ namespace strix
         ASSERT(success, "Failed to create default shader program");
         return defaultShader;
     }
-
     void Renderer::destroyShaderProgram(ShaderProgram *shader)
     {
         glDeleteProgram(shader->program);

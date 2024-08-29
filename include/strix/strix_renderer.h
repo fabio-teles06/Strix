@@ -19,7 +19,9 @@ namespace strix
         //
         // Mesh
         //
-
+        static bool createMesh(Mesh* outMesh, const float* vertices, int vertexCount, const unsigned int* indices, int indexCount);
+        static void destroyMesh(Mesh* mesh);
+        static void drawMesh(const Mesh& mesh, const ShaderProgram& shader);
         //
         // Shader
         //
