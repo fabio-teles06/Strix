@@ -7,15 +7,25 @@
 namespace strix
 {
 
-    class STRIX_API StrixRenderer final
+    class STRIX_API Renderer final
     {
+        static ShaderProgram defaultShader;
+
     public:
-        static void clear();
-        static Mesh *createMesh(
-            bool dynamic, float *vertices, int numVertices,
-            unsigned int *indices, int numIndices,
-            float *normals, float *texcoords);
-        static void drawMesh(Mesh *mesh);
+
+        static void initialize();
+
+        // static void clear();
+        //
+        // Mesh
+        //
+
+        //
+        // Shader
+        //
+        static bool createShaderProgram(ShaderProgram* outShader, const char* vsSource, const char* fsSource);
+        static void destroyShaderProgram(ShaderProgram* shader);
+        static ShaderProgram getDefaultShaderProgram();
     };
 
 }

@@ -3,6 +3,7 @@
 #include <strix/strix_platform.h>
 #include <strix/strix_gl.h>
 #include <strix/strix_game.h>
+#include <strix/strix_renderer.h>
 
 #include <iostream>
 #include <string>
@@ -24,6 +25,8 @@ int strixMain()
     }
 
     strix::Platform::setShouldClose(window, false);
+
+    strix::Renderer::initialize();
 
     strix::Module *game = strix::Platform::loadModule("libgame.dll");
     strix::STRIX_GAME_CALLBACK_ONSTART onGameStart = (strix::STRIX_GAME_CALLBACK_ONSTART)
