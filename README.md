@@ -1,15 +1,13 @@
 # Strix
 
-Uma game engine feita em c++ com opengl do zero
+Uma game engine feita em c++ com opengl do zero. Me baseei em uma série no youtube chamada "Game Engine do zero".
 
-Até o momento não utilizei nenhuma biblioteca, mas pretendo usar algo como:
-- sol2
-- reactphysics3d (talvez eu crie a minha versão se baseando nessa.)
+https://www.youtube.com/playlist?list=PLt_f2ildHl1lZdx8R3CjjH50R8EV6d7CH
 
-Até o momento essa engine está bem abstrata e poderosa eu diria, pois você não estaria limitado aos recursos que eu criei, mas teria que criar os recursos por si próprio.
+Até o momento não utilizei nenhuma biblioteca e essa engine está bem abstrata, pois você está limitado à sua imaginação e habilidade para programar.
 
 Programa demo atual é o quad_demo.cpp
 
-Qualquer bug ou recomendação, crie um pull request/issue.
+Qualquer bug ou recomendação, crie um pull request/issue. O Código é OpenSource, modifique ou reutilize da forma que quiser.
 
 Bio (Fabio).
