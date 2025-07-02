@@ -1,4 +1,4 @@
-#include "strix/logger.h"
+#include <strix/logger.h>
 
 namespace strix
 {
