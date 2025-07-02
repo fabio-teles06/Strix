@@ -1,6 +1,7 @@
 #pragma once
 
 #include <strix/strix.h>
+#include <strix/resource/handle_list.h>
 
 #define STRIX_GL_DEFINE_EXTERN
 #include <strix/strix_gl.h>
@@ -34,4 +35,7 @@ namespace strix
         unsigned int numIndices = 0;
         unsigned int numVertices = 0;
     };
+
+    template class STRIX_API strix::HandleList<Mesh>;
+    template class STRIX_API strix::Handle<Mesh>;
 }
