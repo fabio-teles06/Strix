@@ -15,7 +15,7 @@ endif()
 
 file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include/*.hpp
 )
 
 add_library(strix SHARED ${ENGINE_SOURCES} ${PLATFORM_SOURCES})
