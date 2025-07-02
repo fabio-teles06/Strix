@@ -1,21 +1,19 @@
 file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
 )
 
-add_library(strix STATIC ${ENGINE_SOURCES})
+add_library(strix SHARED ${ENGINE_SOURCES})
 
 target_include_directories(strix PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+target_compile_definitions(strix PRIVATE -DSTRIX_ENGINE_EXPORTS)
 
-# Link com libs externas (ajuste conforme suas dependências reais)
-#    target_link_libraries(strix PUBLIC
-#        glfw
-#        glad
-#        glm
-#        lua
-#    )
-
-# Macro de compilação cross-platform
-target_compile_definitions(strix PUBLIC STRIX_BUILD)
+if (WIN32)
+    target_compile_definitions(strix PRIVATE -D PLATFORM_WINDOWS)
+elseif (UNIX)
+    target_compile_definitions(strix PRIVATE -D PLATFORM_UNIX)
+else()
+    message(FATAL_ERROR "Unsupported platform")
+endif()

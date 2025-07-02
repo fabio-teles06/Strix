@@ -17,6 +17,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Engine
 add_subdirectory(engine)
-
 # Game
 add_subdirectory(game)
+# Launcher
+add_subdirectory(launcher)
