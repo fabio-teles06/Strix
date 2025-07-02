@@ -1,6 +1,4 @@
-#ifndef STRIX_LOGGER_H
-#define STRIX_LOGGER_H
-
+#pragma once
 #include <strix/strix.h>
 #include <cstdio>
 #include <mutex>
@@ -60,5 +58,3 @@ namespace strix
         }
     };
 }
-
-#endif // STRIX_LOGGER_H

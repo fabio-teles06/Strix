@@ -1,24 +1,30 @@
-#ifndef STRIX_H
-#define STRIX_H
+#pragma once
 
 #ifdef _WIN32
 #define PLATFORM_WINDOWS
+#elif defined(__linux__)
+#define PLATFORM_LINUX
 #else
-#define PLATFORM_UNKNOWN
-#error "Unsuported platform"
-#endif // _WIN32
+#error "Unsupported platform. Please define PLATFORM_WINDOWS or PLATFORM_LINUX."
+#endif
+
 
 #ifdef PLATFORM_WINDOWS
 #ifdef STRIX_ENGINE_EXPORTS
 #define STRIX_API __declspec(dllexport)
 #else
 #define STRIX_API __declspec(dllimport)
-#endif // STRIX_EXPORTS
+#endif
+#elif defined(PLATFORM_LINUX)
+#ifdef STRIX_ENGINE_EXPORTS
+#define STRIX_API __attribute__((visibility("default")))
 #else
 #define STRIX_API
-#endif // PLATFORM_WINDOWS
-
-#define ASSERT(_e, ...) if (!(_e)) { fprintf(stderr, __VA_ARGS__); exit(1); }
+#define STRIX_API
+#endif
+#else
+#error "Unsupported platform. Please define PLATFORM_WINDOWS or PLATFORM_LINUX."
+#endif
 
 #include <stdint.h>
 typedef int8_t int8;
@@ -30,5 +36,3 @@ typedef unsigned char uchar;
 typedef uint16_t uint16;
 typedef uint32_t uint32;
 typedef uint64_t uint64;
-
-#endif // STRIX_H

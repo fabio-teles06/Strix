@@ -1,11 +1,14 @@
 #pragma once
 
-#include <types.hpp>
-#include <engine_export.hpp>
+#include <strix/strix.h>
 
 #ifdef PLATFORM_WINDOWS
 #include <windows.h>
 #include <windowsx.h>
+#elif defined(PLATFORM_UNIX)
+#include <X11.h>
+#else
+#error "Unsupported platform"
 #endif
 
 namespace strix{

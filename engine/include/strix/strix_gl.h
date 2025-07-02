@@ -1,23 +1,17 @@
 #pragma once
 
-#include <engine_export.hpp>
+#include <strix/strix.h>
 #include <gl/glcorearb.h>
 
 #ifdef PLATFORM_WINDOWS
 #include <gl/wglext.h>
-#ifdef STRIX_ENGINE_EXPORTS
-#define STRIX_GL_API __declspec(dllexport)
-#else
-#define STRIX_GL_API __declspec(dllimport)
-#endif // STRIX_EXPORTS
 #elif defined(PLATFORM_LINUX)
 #include <GL/glx.h>
-#include <gl/glext.h>
-#define STRIX_GL_API __attribute__((visibility("default")))
 #else
-#define STRIX_GL_API
 #error "Unsupported platform for OpenGL bindings"
 #endif // PLATFORM_WINDOWS
+
+#define STRIX_GL_API STRIX_API
 
 #ifdef STRIX_GL_DEFINE_EXTERN
 #undef STRIX_GL_API
@@ -1300,7 +1294,7 @@ STRIX_GL_API PFNGLGETINTEGERUI64I_VNVPROC glGetIntegerui64i_vNV;
 STRIX_GL_API PFNGLVIEWPORTSWIZZLENVPROC glViewportSwizzleNV;
 STRIX_GL_API PFNGLFRAMEBUFFERTEXTUREMULTIVIEWOVRPROC glFramebufferTextureMultiviewOVR;
 
-#if defined(STRIX_ENGINE_EXPORTS)
+#ifdef STRIX_ENGINE_EXPORTS
 namespace strix
 {
     void getOpenGLFunctionPointers();

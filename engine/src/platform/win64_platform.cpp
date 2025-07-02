@@ -1,7 +1,7 @@
-// #include <strix/strix.h>
-// #include <strix/strix_platform.h>
-// #include <strix/strix_logger.h>
-// #include <strix/strix_gl.h>
+#include <strix/strix.h>
+#include <strix/platform.h>
+#include <strix/strix_gl.h>
+#include <strix/logger.h>
 
 #include <iostream>
 
@@ -349,21 +349,6 @@ namespace strix
             return nullptr;
         }
         return addr;
-    }
-
-    void *Platform::getMemory(size_t size)
-    {
-        return malloc(size);
-    }
-
-    void *Platform::resizeMemory(void *memory, size_t size)
-    {
-        return realloc(memory, size);
-    }
-
-    void Platform::freeMemory(void *memory)
-    {
-        free(memory);
     }
 
 }

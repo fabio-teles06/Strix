@@ -1,7 +1,8 @@
 #define STRIX_GL_DEFINE_EXTERN
-#include <opengl_bind.hpp>
+#include <strix/strix.h>
+#include <strix/strix_gl.h>
 
-#ifndef STRIX_ENGINE_EXPORTS
+#ifdef STRIX_ENGINE_EXPORTS
 namespace strix
 {
 #ifdef PLATFORM_WINDOWS
