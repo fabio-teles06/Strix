@@ -2,7 +2,6 @@
 
 #include <strix/logger.h>
 #include <strix/arena.h>
-#include <strix/strix.h>
 #include <string.h>
 #include <typeinfo>
 
@@ -11,6 +10,9 @@
 
 namespace strix
 {
+    //
+    // SlotInfo
+    //
     struct SlotInfo
     {
         union
@@ -18,9 +20,13 @@ namespace strix
             int resourceIndex;
             int nextFreeSlotIndex;
         };
-        int generation;
+
+        int version;
     };
 
+    //
+    // Handle
+    //
     template <typename>
     class HandleList;
 
@@ -29,7 +35,7 @@ namespace strix
     {
     public:
         int32 slotIndex;
-        int32 generation;
+        int32 version;
 
         int compare(const Handle<T> &other) const;
         int operator==(const Handle<T> &other) const;
@@ -38,45 +44,54 @@ namespace strix
         const T *operator->() const;
 
         static HandleList<T> *handleList;
-        static void registerList(HandleList<T> *list);
+        static void registerList(HandleList<T> *handleList);
     };
 
     template <typename T>
     HandleList<T> *Handle<T>::handleList = nullptr;
+
     template <typename T>
     void Handle<T>::registerList(HandleList<T> *list)
     {
-        handleList = list;
+        Handle<T>::handleList = list;
     }
+
     template <typename T>
     inline int Handle<T>::compare(const Handle<T> &other) const
     {
-        return other.slotIndex == slotIndex && other.generation == generation;
+        return other.slotIndex == slotIndex && other.version == version;
     }
+
     template <typename T>
     inline int Handle<T>::operator==(const Handle<T> &other) const
     {
         return compare(other);
     }
+
     template <typename T>
     inline int Handle<T>::operator!=(const Handle<T> &other) const
     {
         return !compare(other);
     }
 
+    // Specific types can specialize this if necessary
     template <typename T>
     inline T *Handle<T>::operator->()
     {
         Handle<T> handle = *this;
         return Handle<T>::handleList->lookup(handle);
     }
+
     template <typename T>
     inline const T *Handle<T>::operator->() const
     {
-        Handle<T> handle = *this;
+        const Handle<T> handle = *this;
         return Handle<T>::handleList->lookup(handle);
     }
 
+    //
+    // Handle
+    //
     template <typename T>
     class HandleList
     {
@@ -199,7 +214,7 @@ namespace strix
 
         if (handle.slotIndex >= slots.getCapacity() / sizeof(T) || handle.slotIndex < 0)
         {
-            Log::warning("Attempting to remove a Handle slot out of bounds");
+            Logger::Warning("Attempting to remove a Handle slot out of bounds");
             return;
         }
 

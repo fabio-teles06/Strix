@@ -26,6 +26,8 @@
 #error "Unsupported platform. Please define PLATFORM_WINDOWS or PLATFORM_LINUX."
 #endif
 
+#define M_PI 3.14159265358979323846
+
 #include <stdint.h>
 typedef int8_t int8;
 typedef int16_t int16;

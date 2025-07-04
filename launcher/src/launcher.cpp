@@ -3,6 +3,7 @@
 #include <strix/platform.h>
 #include <strix/strix_gl.h>
 #include <strix/module.h>
+#include <strix/resource_manager.h>
 
 #include <iostream>
 #include <chrono>
@@ -45,6 +46,10 @@ int strixMain(){
     strix::Platform::setShouldClose(window, false);
     
     //init Renderer
+
+    strix::ResourceManager::get().initialize();
+    //Renderer::initialize();
+    strix::ResourceManager& resourceManager = strix::ResourceManager::get();
 
     loadGame();
     onGameStart();

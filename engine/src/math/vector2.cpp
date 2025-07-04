@@ -1,120 +1,125 @@
 #include <strix/math/vector2.h>
-#include <cmath>
+#include <math.h>
 
-namespace strix {
-    inline Vector2::Vector2(float xy): x(xy), y(xy) {}   
-    inline Vector2::Vector2(float x, float y): x(x), y(y) {}
-    Vector2::Vector2() {}
+namespace strix
+{
+  inline Vector2::Vector2(float xy):
+    x(xy), y(xy) {}
 
-    void Vector2::set(float x, float y) {
-        this->x = x;
-        this->y = y;
-    }
+  inline Vector2::Vector2(float x, float y):
+    x(x), y(y) {}
 
-    Vector2& Vector2::sum(float f) {
-        x += f;
-        y += f;
-        return *this;
-    }
+  Vector2::Vector2() {}
 
-    Vector2& Vector2::mul(float f) {
-        x *= f;
-        y *= f;
-        return *this;
-    }
+  void Vector2::set(float x, float y)
+  {
+    this->x = x;
+    this->y = y;
+  }
 
-    Vector2& Vector2::div(float f) {
-        if (f != 0) {
-            x /= f;
-            y /= f;
-        }
-        return *this;
-    }
+  Vector2& Vector2::sum(float f)
+  {
+    x += f;
+    y += f;
+    return *this;
+  }
 
-    Vector2& Vector2::sub(float f) {
-        x -= f;
-        y -= f;
-        return *this;
-    }
+  Vector2& Vector2::sub(float f)
+  {
+    x -= f;
+    y -= f;
+    return *this;
+  }
 
-    Vector2& Vector2::sum(Vector2& v) {
-        x += v.x;
-        y += v.y;
-        return *this;
-    }
+  Vector2& Vector2::mult(float f)
+  {
+    x *= f;
+    y *= f;
+    return *this;
+  }
 
-    Vector2& Vector2::mul(Vector2& v) {
-        x *= v.x;
-        y *= v.y;
-        return *this;
-    }
+  Vector2& Vector2::div(float f)
+  {
+    x /= f;
+    y /= f;
+    return *this;
+  }
 
-    Vector2& Vector2::div(Vector2& v) {
-        if (v.x != 0 && v.y != 0) {
-            x /= v.x;
-            y /= v.y;
-        }
-        return *this;
-    }
+  Vector2& Vector2::sum(float x, float y) 
+  {
+    this->x += x;
+    this->y += y;
+    return *this;
+  }
 
-    Vector2& Vector2::sub(Vector2& v) {
-        x -= v.x;
-        y -= v.y;
-        return *this;
-    }
+  Vector2& Vector2::sub(float x, float y)
+  {
+    this->x -= x;
+    this->y -= y;
+    return *this;
+  }
 
-    float Vector2::length() {
-        return std::sqrt(x * x + y * y);
-    }
+  Vector2& Vector2::mult(float x, float y)
+  {
+    this->x *= x;
+    this->y *= y;
+    return *this;
+  }
 
-    float Vector2::lengthSquared() {
-        return x * x + y * y;
-    }
+  Vector2& Vector2::div(float x, float y)
+  {
+    this->x /= x;
+    this->y /= y;
+    return *this;
+  }
 
-    Vector2& Vector2::normalize() {
-        float len = length();
-        if (len > 0) {
-            x /= len;
-            y /= len;
-        }
-        return *this;
-    }
+  Vector2& Vector2::sum(Vector2& other)
+  {
+    return sum(other.x, other.y);
+  }
 
-    Vector2& Vector2::abs() {
-        x = std::fabs(x);
-        y = std::fabs(y);
-        return *this;
-    }
+  Vector2& Vector2::sub(Vector2& other)
+  {
+    return sub(other.x, other.y);
+  }
 
-    float Vector2::dot(Vector2& v) const {
-        return x * v.x + y * v.y;
-    }
+  Vector2& Vector2::mult(Vector2& other)
+  {
+    return mult(other.x, other.y);
+  }
 
-    float Vector2::cross(Vector2& v) const {
-        return x * v.y - y * v.x;
-    }
+  Vector2& Vector2::div(Vector2& other)
+  {
+    return div(other.x, other.y);
+  }
 
-    bool Vector2::operator==(const Vector2& v) const {
-        return x == v.x && y == v.y;
-    }
+  float Vector2::length()
+  {
+    return (float) sqrt(x*x + y*y);
+  }
 
-    bool Vector2::operator!=(const Vector2& v) const {
-        return !(*this == v);
-    }
+  Vector2& Vector2::normalized()
+  {
+    float len = length();
+    x /= len;
+    y /= len;
+    return *this;
+  }
 
-    Vector2 Vector2::operator+(const Vector2& v) const {
-        return Vector2(x + v.x, y + v.y);
-    }
+  Vector2& Vector2::abs()
+  {
+    x = (float)fabs(x);
+    y = (float)fabs(y);
+    return *this;
+  }
 
-    Vector2 Vector2::operator-(const Vector2& v) const {
-        return Vector2(x - v.x, y - v.y);
-    }
+  float Vector2::dot(Vector2& other)
+  {
+    return x * other.x + y * other.y;
+  }
 
-    Vector2 Vector2::operator*(const Vector2& v) const {
-        return Vector2(x * v.x, y * v.y);
-    }
-
-    Vector2 Vector2::operator/(const Vector2& v) const {
-        return Vector2((v.x != 0 ? x / v.x : 0), (v.y != 0 ? y / v.y : 0));
-    }
+  float Vector2::cross(Vector2& other)
+  {
+    return (float)(x * other.y - y * other.x);
+  }
 }

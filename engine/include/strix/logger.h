@@ -17,15 +17,19 @@ namespace strix
     private:
         static LogLevel m_logLevel;
         static std::mutex m_log_mutex;
-
     public:
         static void set_log_level(LogLevel logLevel)
         {
             m_logLevel = logLevel;
         }
-        
-        template<typename... Args>
-        static void Info(const char* message, Args... args) {
+
+        /**
+         * Log an informational message
+         * @param message The message to log
+         */
+        template <typename... Args>
+        static void Info(const char *message, Args... args)
+        {
             if (m_logLevel <= LogLevel::INFO_LOG)
             {
                 std::scoped_lock lock(m_log_mutex);
@@ -35,8 +39,13 @@ namespace strix
             }
         }
 
-        template<typename... Args>
-        static void Warning(const char* message, Args... args) {
+        /**
+         * Log a warning message
+         * @param message The message to log
+         */
+        template <typename... Args>
+        static void Warning(const char *message, Args... args)
+        {
             if (m_logLevel <= LogLevel::WARNING_LOG)
             {
                 std::scoped_lock lock(m_log_mutex);
@@ -46,8 +55,13 @@ namespace strix
             }
         }
 
-        template<typename... Args>
-        static void Error(const char* message, Args... args) {
+        /**
+         * Log an error message
+         * @param message The message to log
+         */
+        template <typename... Args>
+        static void Error(const char *message, Args... args)
+        {
             if (m_logLevel <= LogLevel::ERROR_LOG)
             {
                 std::scoped_lock lock(m_log_mutex);
